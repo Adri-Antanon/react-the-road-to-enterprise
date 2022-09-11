@@ -7,7 +7,11 @@ module.exports = {
     'stylelint-config-prettier',
   ],
   plugins: ['stylelint-scss'],
-  ignoreFiles: ['./node_modules/**/*.css'],
+  ignoreFiles: [
+    './coverage/**/*.css',
+    './dist/**/*.css',
+    './node_modules/**/*.css',
+  ],
   rules: {
     'at-rule-no-unknown': [
       true,
