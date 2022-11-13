@@ -54,9 +54,8 @@ export const getUsers = async (
   reply: FastifyReply
 ) => {
   await sleep()
-  const users = await readUsers()
   return {
-    users,
+    users: await readUsers(),
   }
 }
 
@@ -107,6 +106,27 @@ export const resetUsers = async (
   reply: FastifyReply
 ) => {
   await sleep()
-  await fs.writeFile(usersFilePath, JSON.stringify(usersOriginal), 'utf-8')
+  await writeUsers(usersOriginal)
+  return true
+}
+
+type DeleteUser = {
+  Params: {
+    id: string
+  }
+}
+
+export const deleteUser = async (
+  request: FastifyRequest<DeleteUser>,
+  reply: FastifyReply
+) => {
+  const { id } = request.params
+
+  if (!id) throw new Error('User id is required')
+
+  await sleep()
+  const users = await readUsers()
+  const updatedUsers = users.filter((_user) => _user.id !== id)
+  await writeUsers(updatedUsers)
   return true
 }
